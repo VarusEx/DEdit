@@ -175,7 +175,7 @@ class Ui_MainWindow(QMainWindow):
         self.xmldata = []
 
         # Call Init function
-   #     self.read_keywords_from_xml()
+        self.read_keywords_from_xml()
 
 
     def new_file(self):
@@ -185,6 +185,7 @@ class Ui_MainWindow(QMainWindow):
         self.fullname.append(filename)
         self.pointforobject.append(str(tab))
         self.tabWidget.setCurrentWidget(tab)
+
 
     def file_save(self):
         try:
@@ -254,7 +255,6 @@ class Ui_MainWindow(QMainWindow):
 
     def read_keywords_from_xml(self):
         way = api.find_way_to_file(self,"keywords.xml")
-        print(way)
         xml_doc = minidom.parse(way)
 
         self.xmldata.append([])
@@ -262,7 +262,7 @@ class Ui_MainWindow(QMainWindow):
         for item in xml_doc.getElementsByTagName('keywords')[0].getElementsByTagName("item"):
             self.xmldata[0].append(item.attributes["word"].value)
         self.xmldata.append([])
-        for item in xml_doc.getElementsByTagName('operators')[0].getElementsByTagName("item"):
+        for item in xml_doc.getElementsByTagName('opertors')[0].getElementsByTagName("item"):
             self.xmldata[1].append(item.attributes["symbol"].value)
         self.xmldata.append([])
         for item in xml_doc.getElementsByTagName('braces')[0].getElementsByTagName("item"):
