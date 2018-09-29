@@ -17,7 +17,7 @@ from PyQt5.QtGui import QIcon, QPixmap, QSyntaxHighlighter, QColor, QTextCharFor
 from PyQt5.QtWidgets import QFrame, QWidget, QGridLayout, QTextEdit, QHBoxLayout, QProgressBar\
                             , QLabel, QLayout, QSizePolicy, QSpacerItem, QPushButton, QTabWidget\
                             , QFormLayout, QMainWindow, QApplication, QFileDialog, QMessageBox
-
+import api
 
 class Ui_MainWindow(QMainWindow):
     def setupUi(self, MainWindow):
@@ -175,7 +175,7 @@ class Ui_MainWindow(QMainWindow):
         self.xmldata = []
 
         # Call Init function
-        self.read_keywords_from_xml()
+   #     self.read_keywords_from_xml()
 
 
     def new_file(self):
@@ -189,9 +189,9 @@ class Ui_MainWindow(QMainWindow):
     def file_save(self):
         try:
             type_to_save = "Daedalus (*.d) ;; ModelScript (*.mds);; Source Scripts(*src)"
-            name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', type_to_save , options=None)
+            name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', type_to_save)
             file = open(name, "w")
-            tab = self.get_tab_object()
+            tab = api.get_tab_object(self.tabWidget)
             text = tab.toPlainText()
             file.write(text)
             file.close()
@@ -203,13 +203,13 @@ class Ui_MainWindow(QMainWindow):
     def load_file(self):
         try:
             name, _ = QFileDialog.getOpenFileName(self, 'Open File', '\\*.d', "Daedalus (*.d) ;; "
-                                                                              "ModelScript (*.mds)"
+                                                                              "ModelScript (*.mds)"     
                                                                               ";; Source Scripts(*src)")
             file = open(name, 'r')
 
             with file:
                 text = file.read()
-                self.creat_tab(text, name)
+                self.create_tab(text, name)
 
         except FileNotFoundError:
             pass
@@ -217,7 +217,7 @@ class Ui_MainWindow(QMainWindow):
             pass
 
     def create_tab(self, content, filename):
-        result = self.check_exist_filename(filename)
+        result = api.check_exist_filename(self, filename)
         if result is True:
             self.create_msg("Exist", "You have open this file on tab ")
         elif result is False:
@@ -234,29 +234,11 @@ class Ui_MainWindow(QMainWindow):
         msg = QMessageBox
         msg.information(self, title, text, msg.Yes)
 
-    def check_exist_filename(self, name):
-        if self.fullname.count(name) == 1:
-            return True
-        else:
-            return False
-
     def return_image(self, name, size):
         icon = QIcon()
         icon.addPixmap(QPixmap(self.filepath + "\\" + name), QIcon.Normal, QIcon.Off)
         icon.pixmap(QSize(size, size))
         return icon
-
-    def get_tab_object(self):
-        current = self.tabWidget.currentWidget()
-        return current
-
-    def get_tab_index(self):
-        index = self.tabWidget.indexOf(self.get_tab_object())
-        return index
-
-    def get_tab_name(self):
-        name = self.tabWidget.tabText(self.get_tab_index())
-        return name
 
     def closeEvent(self, event):
         event.ignore()
@@ -271,7 +253,7 @@ class Ui_MainWindow(QMainWindow):
             pass
 
     def read_keywords_from_xml(self):
-        way = self.find_way_to_file("keywords.xml")
+        way = api.find_way_to_file(self,"keywords.xml")
         print(way)
         xml_doc = minidom.parse(way)
 
@@ -289,12 +271,6 @@ class Ui_MainWindow(QMainWindow):
         for item in xml_doc.getElementsByTagName('function')[0].getElementsByTagName("item"):
             self.xmldata[3].append(item.attributes["func"].value)
         self.xmldata.append([])
-
-    def find_way_to_file(self, file):
-        base = path.abspath(path.join(self.basepath, file))
-        return base
-
-
 
 if __name__ == "__main__":
     import sys
