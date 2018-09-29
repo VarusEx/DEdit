@@ -6,12 +6,17 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+from os import path, walk, environ
+
+from  xml.dom import minidom
+
 from PyQt5.QtCore import QSize, Qt, QMetaObject, pyqtSignal
-from PyQt5.QtGui import QIcon, QPixmap
+
+from PyQt5.QtGui import QIcon, QPixmap, QSyntaxHighlighter, QColor, QTextCharFormat
+
 from PyQt5.QtWidgets import QFrame, QWidget, QGridLayout, QTextEdit, QHBoxLayout, QProgressBar\
                             , QLabel, QLayout, QSizePolicy, QSpacerItem, QPushButton, QTabWidget\
                             , QFormLayout, QMainWindow, QApplication, QFileDialog, QMessageBox
-from os import path
 
 
 class Ui_MainWindow(QMainWindow):
@@ -67,7 +72,7 @@ class Ui_MainWindow(QMainWindow):
         spacerItem = QSpacerItem(40, 20, QSizePolicy.Maximum, QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem)
 
-        #Button New
+        # Button New
         self.btn_new = QPushButton(self.frame)
         self.btn_new.setMaximumSize(QSize(80, 50))
         self.btn_new.setText("")
@@ -78,7 +83,7 @@ class Ui_MainWindow(QMainWindow):
         spacerItem1 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
 
-        #Button Open
+        # Button Open
         self.btn_open = QPushButton(self.frame)
         self.btn_open.setMaximumSize(QSize(80, 50))
         self.btn_open.setText("")
@@ -89,7 +94,7 @@ class Ui_MainWindow(QMainWindow):
         spacerItem2 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
 
-        #Button Save
+        # Button Save
         self.btn_save = QPushButton(self.frame)
         self.btn_save.setMaximumSize(QSize(80, 50))
         self.btn_save.setText("")
@@ -100,7 +105,7 @@ class Ui_MainWindow(QMainWindow):
         spacerItem3 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem3)
 
-        #Button On/Off Highlihte
+        # Button On/Off Highlihte
         self.btn_light = QPushButton(self.frame)
         self.btn_light.setMaximumSize(QSize(80, 50))
         self.btn_light.setText("")
@@ -110,7 +115,7 @@ class Ui_MainWindow(QMainWindow):
         spacerItem4 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem4)
 
-        #Button Change Leangue
+        # Button Change Leangue
         self.btn_lang = QPushButton(self.frame)
         self.btn_lang.setMaximumSize(QSize(80, 50))
         self.btn_lang.setText("")
@@ -167,6 +172,11 @@ class Ui_MainWindow(QMainWindow):
         # Create Arrays
         self.fullname = ["New 1"]
         self.pointforobject = ["New 1"]
+        self.xmldata = []
+
+        # Call Init function
+        self.read_keywords_from_xml()
+
 
     def new_file(self):
         tab = QTextEdit()
@@ -259,6 +269,31 @@ class Ui_MainWindow(QMainWindow):
             sys.exit()
         else:
             pass
+
+    def read_keywords_from_xml(self):
+        way = self.find_way_to_file("keywords.xml")
+        print(way)
+        xml_doc = minidom.parse(way)
+
+        self.xmldata.append([])
+        # While to takes elements from xml file
+        for item in xml_doc.getElementsByTagName('keywords')[0].getElementsByTagName("item"):
+            self.xmldata[0].append(item.attributes["word"].value)
+        self.xmldata.append([])
+        for item in xml_doc.getElementsByTagName('operators')[0].getElementsByTagName("item"):
+            self.xmldata[1].append(item.attributes["symbol"].value)
+        self.xmldata.append([])
+        for item in xml_doc.getElementsByTagName('braces')[0].getElementsByTagName("item"):
+            self.xmldata[2].append(item.attributes["key"].value)
+        self.xmldata.append([])
+        for item in xml_doc.getElementsByTagName('function')[0].getElementsByTagName("item"):
+            self.xmldata[3].append(item.attributes["func"].value)
+        self.xmldata.append([])
+
+    def find_way_to_file(self, file):
+        base = path.abspath(path.join(self.basepath, file))
+        return base
+
 
 
 if __name__ == "__main__":
