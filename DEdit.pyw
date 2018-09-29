@@ -72,7 +72,7 @@ class Ui_MainWindow(QMainWindow):
         self.btn_new.setMaximumSize(QSize(80, 50))
         self.btn_new.setText("")
         self.btn_new.setObjectName("btn_new")
-        self.btn_new.setIcon(self.returnimage("New.png", 40))
+        self.btn_new.setIcon(self.return_image("New.png", 40))
         self.btn_new.clicked.connect(self.new_file)
         self.horizontalLayout.addWidget(self.btn_new)
         spacerItem1 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
@@ -83,7 +83,7 @@ class Ui_MainWindow(QMainWindow):
         self.btn_open.setMaximumSize(QSize(80, 50))
         self.btn_open.setText("")
         self.btn_open.setObjectName("btn_open")
-        self.btn_open.setIcon(self.returnimage("open-file.png", 40))
+        self.btn_open.setIcon(self.return_image("open-file.png", 40))
         self.btn_open.clicked.connect(self.load_file)
         self.horizontalLayout.addWidget(self.btn_open)
         spacerItem2 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
@@ -94,7 +94,7 @@ class Ui_MainWindow(QMainWindow):
         self.btn_save.setMaximumSize(QSize(80, 50))
         self.btn_save.setText("")
         self.btn_save.setObjectName("btn_save")
-        self.btn_save.setIcon(self.returnimage("save.png", 40))
+        self.btn_save.setIcon(self.return_image("save.png", 40))
         self.btn_save.clicked.connect(self.file_save)
         self.horizontalLayout.addWidget(self.btn_save)
         spacerItem3 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
@@ -105,7 +105,7 @@ class Ui_MainWindow(QMainWindow):
         self.btn_light.setMaximumSize(QSize(80, 50))
         self.btn_light.setText("")
         self.btn_light.setObjectName("btn_light")
-        self.btn_light.setIcon(self.returnimage("light.png", 40))
+        self.btn_light.setIcon(self.return_image("light.png", 40))
         self.horizontalLayout.addWidget(self.btn_light)
         spacerItem4 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem4)
@@ -115,7 +115,7 @@ class Ui_MainWindow(QMainWindow):
         self.btn_lang.setMaximumSize(QSize(80, 50))
         self.btn_lang.setText("")
         self.btn_lang.setObjectName("btn_lang")
-        self.btn_lang.setIcon(self.returnimage("translate.png", 40))
+        self.btn_lang.setIcon(self.return_image("translate.png", 40))
         self.horizontalLayout.addWidget(self.btn_lang)
 
         spacerItem5 = QSpacerItem(40, 20, QSizePolicy.Maximum, QSizePolicy.Minimum)
@@ -147,8 +147,8 @@ class Ui_MainWindow(QMainWindow):
         self.tabWidget.setAutoFillBackground(True)
         self.tabWidget.setObjectName("tabWidget")
         self.tab = QTextEdit()
-        self.tab.setObjectName("Tab 1")
-        self.tabWidget.addTab(self.tab, "Tab 1")
+        self.tab.setObjectName("New 1")
+        self.tabWidget.addTab(self.tab, "New 1")
         self.formLayout.setWidget(0, QFormLayout.FieldRole, self.tabWidget)
         self.gridLayout.addWidget(self.frame_2, 2, 1, 1, 1)
         spacerItem6 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -165,22 +165,21 @@ class Ui_MainWindow(QMainWindow):
         QMetaObject.connectSlotsByName(MainWindow)
 
         # Create Arrays
-        self.fullname = ["Tab 1"]
-        self.pointforobject = ["Tab 1"]
+        self.fullname = ["New 1"]
+        self.pointforobject = ["New 1"]
 
     def new_file(self):
-        self.tab = QTextEdit()
+        tab = QTextEdit()
         filename = str(len(self.fullname) + 1)
-        self.tabWidget.addTab(self.tab, "New " + filename)
+        self.tabWidget.addTab(tab, "New " + filename)
         self.fullname.append(filename)
-        self.pointforobject.append(self.tab)
-        self.tabWidget.setCurrentWidget(self.tab)
+        self.pointforobject.append(str(tab))
+        self.tabWidget.setCurrentWidget(tab)
 
     def file_save(self):
         try:
-            name, _ = QFileDialog.getSaveFileName(self, 'Save File', '\\*.d', "Daedalus (*.d) ;; "
-                                                                              "ModelScript (*.mds)"
-                                                                              ";; Source Scripts(*src)")
+            type_to_save = "Daedalus (*.d) ;; ModelScript (*.mds);; Source Scripts(*src)"
+            name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', type_to_save , options=None)
             file = open(name, "w")
             tab = self.get_tab_object()
             text = tab.toPlainText()
@@ -207,36 +206,35 @@ class Ui_MainWindow(QMainWindow):
         except TypeError:
             pass
 
-    def creat_tab(self, content, filename):
-        self.result = self.checkexistfilename(filename)
-        if self.result is True:
-            self.creat_msg("Exist", "You have open this file on tab ")
-        elif self.result is False:
+    def create_tab(self, content, filename):
+        result = self.check_exist_filename(filename)
+        if result is True:
+            self.create_msg("Exist", "You have open this file on tab ")
+        elif result is False:
             # Add Tab
-            self.tabs = QTextEdit()
-            self.tabWidget.addTab(self.tabs, filename)
-            self.tabs.setText(content)
+            tabs = QTextEdit()
+            self.tabWidget.addTab(tabs, filename)
+            tabs.setText(content)
             self.fullname.append(filename)
-            self.pointforobject.append(self.tabs)
-            self.tabWidget.setCurrentWidget(self.tabs)
+            self.pointforobject.append(str(tabs))
+            self.tabWidget.setCurrentWidget(tabs)
         return
 
-    def creat_msg(self, title, text):
-        msg = QMessageBox.information(self, title,
-                                                text,
-                                                QMessageBox.Yes)
+    def create_msg(self, title, text):
+        msg = QMessageBox
+        msg.information(self, title, text, msg.Yes)
 
-    def checkexistfilename(self, name):
+    def check_exist_filename(self, name):
         if self.fullname.count(name) == 1:
             return True
         else:
             return False
 
-    def returnimage(self, name, size):
-        self.icon = QIcon()
-        self.icon.addPixmap(QPixmap(self.filepath + "\\" + name), QIcon.Normal, QIcon.Off)
-        self.icon.pixmap(QSize(size, size))
-        return self.icon
+    def return_image(self, name, size):
+        icon = QIcon()
+        icon.addPixmap(QPixmap(self.filepath + "\\" + name), QIcon.Normal, QIcon.Off)
+        icon.pixmap(QSize(size, size))
+        return icon
 
     def get_tab_object(self):
         current = self.tabWidget.currentWidget()
@@ -255,13 +253,13 @@ class Ui_MainWindow(QMainWindow):
         self.close_application()
 
     def close_application(self):
-        choice = QMessageBox.question(self, "Close",
-                                                "Really you want close?",
-                                                QMessageBox.Yes | QMessageBox.No)
-        if choice == QMessageBox.Yes:
+        msg = QMessageBox
+        choice = msg.question(self, "Close", "Really you want close?", msg.Yes | msg.No)
+        if choice == msg.Yes:
             sys.exit()
         else:
             pass
+
 
 if __name__ == "__main__":
     import sys
