@@ -18,7 +18,11 @@
         <item word="true"/>
         <item word="false"/>
     </keywords>
-
+    <comment>
+        <item symbol="//"/>
+        <item symbol="/*"/>
+        <item symbol="*/"/>
+    </comment>
     <opertors>
         <item symbol="+"/>
         <item symbol="/"/>
