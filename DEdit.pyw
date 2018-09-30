@@ -6,18 +6,20 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from os import path, walk, environ
+from os import path
 
 from  xml.dom import minidom
 
-from PyQt5.QtCore import QSize, Qt, QMetaObject, pyqtSignal
+from PyQt5.QtCore import QSize, Qt, QMetaObject
 
-from PyQt5.QtGui import QIcon, QPixmap, QSyntaxHighlighter, QColor, QTextCharFormat
+from PyQt5.QtGui import QIcon, QPixmap
 
 from PyQt5.QtWidgets import QFrame, QWidget, QGridLayout, QTextEdit, QHBoxLayout, QProgressBar\
                             , QLabel, QLayout, QSizePolicy, QSpacerItem, QPushButton, QTabWidget\
                             , QFormLayout, QMainWindow, QApplication, QFileDialog, QMessageBox
 import api
+import xml_read
+import syntax
 
 class Ui_MainWindow(QMainWindow):
     def setupUi(self, MainWindow):
@@ -172,10 +174,6 @@ class Ui_MainWindow(QMainWindow):
         # Create Arrays
         self.fullname = ["New 1"]
         self.pointforobject = ["New 1"]
-        self.xmldata = []
-
-        # Call Init function
-        self.read_keywords_from_xml()
 
 
     def new_file(self):
@@ -185,7 +183,7 @@ class Ui_MainWindow(QMainWindow):
         self.fullname.append(filename)
         self.pointforobject.append(str(tab))
         self.tabWidget.setCurrentWidget(tab)
-
+        syntax.Highlighter(tab.document())
 
     def file_save(self):
         try:
@@ -253,24 +251,7 @@ class Ui_MainWindow(QMainWindow):
         else:
             pass
 
-    def read_keywords_from_xml(self):
-        way = api.find_way_to_file(self,"keywords.xml")
-        xml_doc = minidom.parse(way)
 
-        self.xmldata.append([])
-        # While to takes elements from xml file
-        for item in xml_doc.getElementsByTagName('keywords')[0].getElementsByTagName("item"):
-            self.xmldata[0].append(item.attributes["word"].value)
-        self.xmldata.append([])
-        for item in xml_doc.getElementsByTagName('opertors')[0].getElementsByTagName("item"):
-            self.xmldata[1].append(item.attributes["symbol"].value)
-        self.xmldata.append([])
-        for item in xml_doc.getElementsByTagName('braces')[0].getElementsByTagName("item"):
-            self.xmldata[2].append(item.attributes["key"].value)
-        self.xmldata.append([])
-        for item in xml_doc.getElementsByTagName('function')[0].getElementsByTagName("item"):
-            self.xmldata[3].append(item.attributes["func"].value)
-        self.xmldata.append([])
 
 if __name__ == "__main__":
     import sys
