@@ -22,51 +22,49 @@ def format(color, style=''):
 
 
 STYLES = {
-    'keyword': format('darkBlue'),
+    'keyword': format('blue'),
     'operator': format('red'),
     'comment': format('darkGreen'),
-    'brace': format('darkGray'),
-    'function': format('yellow'),
+    'function': format('darkBlue'),
     'string': format('green'),
     'numbers': format('blue')
 }
 
 
 class Highlighter(QSyntaxHighlighter):
-    def __init__(self, document):
-        QSyntaxHighlighter.__init__(self, document)
+    def __init__(self, parent=None):
+        super(Highlighter, self).__init__(parent)
+
+        xml_read.read_keywords_from_xml(self)
 
         array_from_xml = xml_read.xmldata
-        rules = []
 
-        rules += [(QRegExp(pattern), STYLES['keyword'])for pattern in
-                  array_from_xml[0]]
+        self.rules = []
 
-        rules += [(QRegExp(func), STYLES['function'])for func in
-                  array_from_xml[4]]
+        self.rules += [(QRegExp(keyword), STYLES['keyword'])for keyword in
+                 array_from_xml[0]]
+        self.rules += [(QRegExp(func), STYLES['function'])for func in
+                 array_from_xml[4]]
 
-        rules += [(QRegExp(operator), STYLES['operator'])for operator in
-                  array_from_xml[1]]
-
-        rules.append((QRegExp("//[^\n]*"), STYLES['comment']))
-
-        rules += [
-        # Numeric light
-        (r'\b[+-]?[0-9]+[lL]?\b', 0, STYLES['numbers']),
-        (r'\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\b', 0, STYLES['numbers']),
-        (r'\b[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\b', 0, STYLES['numbers']),
-        ]
+        self.rules.append((QRegExp("//[^\n]*"), STYLES['comment']))
+        # Numbers to fix
+        #self.rules += [
+        #(r'\b[+-]?[0-9]+[lL]?\b', 0, STYLES['numbers']),
+        #(r'\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\b', 0, STYLES['numbers']),
+        #(r'\b[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\b', 0, STYLES['numbers']),
+        #]
+        # Multi-Line to repair don't set color
         self.commentStartExpression = QRegExp("/*\\")
         self.commentEndExpression = QRegExp("\\*/")
 
     def highlightBlock(self, text):
-        for pattern, format in self.highlightingRules:
+        for pattern, format in self.rules:
             expression = QRegExp(pattern)
             index = expression.indexIn(text)
             while index >= 0:
                 length = expression.matchedLength()
                 self.setFormat(index, length, format)
-                index = expression.indexIn(text,index+length)
+                index = expression.indexIn(text, index+length)
 
         self.setCurrentBlockState(0)
 

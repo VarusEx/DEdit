@@ -24,5 +24,5 @@ def check_exist_filename(self, name):
 
 
 def find_way_to_file(self, file):
-    base = path.abspath(path.join(self.basepath, file))
+    base = path.abspath(path.join(path.dirname(__file__), file))
     return base
