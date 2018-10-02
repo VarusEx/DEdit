@@ -8,8 +8,6 @@
 
 from os import path
 
-from  xml.dom import minidom
-
 from PyQt5.QtCore import QSize, Qt, QMetaObject
 
 from PyQt5.QtGui import QIcon, QPixmap
@@ -18,7 +16,6 @@ from PyQt5.QtWidgets import QFrame, QWidget, QGridLayout, QTextEdit, QHBoxLayout
                             , QLabel, QLayout, QSizePolicy, QSpacerItem, QPushButton, QTabWidget\
                             , QFormLayout, QMainWindow, QApplication, QFileDialog, QMessageBox
 import api
-import xml_read
 import syntax
 
 class Ui_MainWindow(QMainWindow):
@@ -156,6 +153,7 @@ class Ui_MainWindow(QMainWindow):
         self.tab = QTextEdit()
         self.tab.setObjectName("New 1")
         self.tabWidget.addTab(self.tab, "New 1")
+        self.highlight = syntax.Highlighter(self.tab.document())
         self.formLayout.setWidget(0, QFormLayout.FieldRole, self.tabWidget)
         self.gridLayout.addWidget(self.frame_2, 2, 1, 1, 1)
         spacerItem6 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -175,15 +173,15 @@ class Ui_MainWindow(QMainWindow):
         self.fullname = ["New 1"]
         self.pointforobject = ["New 1"]
 
-
     def new_file(self):
         tab = QTextEdit()
+        tab.toPlainText().encode("utf-8").decode("ansi")
         filename = str(len(self.fullname) + 1)
         self.tabWidget.addTab(tab, "New " + filename)
         self.fullname.append(filename)
         self.pointforobject.append(str(tab))
         self.tabWidget.setCurrentWidget(tab)
-        syntax.Highlighter(tab.document())
+        self.highlight = syntax.Highlighter(tab.document())
 
     def file_save(self):
         try:
@@ -201,9 +199,8 @@ class Ui_MainWindow(QMainWindow):
 
     def load_file(self):
         try:
-            name, _ = QFileDialog.getOpenFileName(self, 'Open File', '\\*.d', "Daedalus (*.d) ;; "
-                                                                              "ModelScript (*.mds)"     
-                                                                              ";; Source Scripts(*src)")
+            type_to_load = "Daedalus (*.d) ;; ModelScript (*.mds);; Source Scripts(*src)"
+            name, _ = QFileDialog.getOpenFileName(self, 'Open File', '\\*.d', type_to_load)
             file = open(name, 'r')
 
             with file:
@@ -215,18 +212,19 @@ class Ui_MainWindow(QMainWindow):
         except TypeError:
             pass
 
-    def create_tab(self, content, filename):
+    def create_tab(self, content="", filename="New"):
         result = api.check_exist_filename(self, filename)
         if result is True:
             self.create_msg("Exist", "You have open this file on tab ")
         elif result is False:
             # Add Tab
-            tabs = QTextEdit()
-            self.tabWidget.addTab(tabs, filename)
-            tabs.setText(content)
+            tab = QTextEdit()
+            self.tabWidget.addTab(tab, filename)
+            tab.setText(content)
+            self.highlight = syntax.Highlighter(tab.document())
             self.fullname.append(filename)
-            self.pointforobject.append(str(tabs))
-            self.tabWidget.setCurrentWidget(tabs)
+            self.pointforobject.append(str(tab))
+            self.tabWidget.setCurrentWidget(tab)
         return
 
     def create_msg(self, title, text):
@@ -250,7 +248,6 @@ class Ui_MainWindow(QMainWindow):
             sys.exit()
         else:
             pass
-
 
 
 if __name__ == "__main__":
