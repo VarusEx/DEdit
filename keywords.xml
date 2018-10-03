@@ -18,28 +18,21 @@
         <item word="true"/>
         <item word="false"/>
     </keywords>
-    <comment>
-        <item symbol="//"/>
-        <item symbol="/*"/>
-        <item symbol="*/"/>
-    </comment>
     <opertors>
-        <item symbol="+"/>
-        <item symbol="/"/>
-        <item symbol="*"/>
-        <item symbol="-"/>
-        <item symbol="="/>
-        <item symbol="=="/>
-        <item symbol="!="/>
-        <item symbol="!"/>
-        <item symbol="||"/>
-        <item symbol=","/>
+        <item symbol="\+"/>
+        <item symbol="\/"/>
+        <item symbol="\*"/>
+        <item symbol="\-"/>
+        <item symbol="\="/>
+        <item symbol="\=\="/>
+        <item symbol="\!\="/>
+        <item symbol="\!\"/>
+        <item symbol="\|\|"/>
+        <item symbol="\,"/>
+        <item symbol="\;"/>
+        <item symbol="\}"/>
+        <item symbol="\{"/>
     </opertors>
-
-    <braces>
-        <item key="//"/>
-    </braces>
-
     <function>
         <item func="Apply_Options_Performance"/>
         <item func="Apply_Options_Video"/>

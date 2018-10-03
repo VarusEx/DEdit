@@ -7,6 +7,7 @@ from PyQt5.QtGui import QColor, QTextCharFormat, QFont, QSyntaxHighlighter
 import xml_read
 
 # Return Formated Text with attributes
+
 def format(color, style=''):
 
     _color = QColor()
@@ -41,18 +42,18 @@ class Highlighter(QSyntaxHighlighter):
 
         self.rules = []
 
-        self.rules += [(QRegExp(keyword), STYLES['keyword'])for keyword in
-                 array_from_xml[0]]
-        self.rules += [(QRegExp(func), STYLES['function'])for func in
-                 array_from_xml[4]]
-
-        self.rules.append((QRegExp("//[^\n]*"), STYLES['comment']))
-        # Numbers to fix
-        #self.rules += [
-        #(r'\b[+-]?[0-9]+[lL]?\b', 0, STYLES['numbers']),
-        #(r'\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\b', 0, STYLES['numbers']),
-        #(r'\b[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\b', 0, STYLES['numbers']),
-        #]
+        self.rules += [(QRegExp(r'\b%s\b' % keyword, 0), STYLES['keyword'])for keyword in
+                        array_from_xml[0]]
+        self.rules += [(QRegExp(r'%s' % operator, 0), STYLES['operator']) for operator in
+                        array_from_xml[1]]
+        self.rules += [(QRegExp(r'\b%s\b' % func, 0), STYLES['function'])for func in
+                        array_from_xml[2]]
+        self.rules += [(QRegExp(r'"[^"\\]*(\\.[^"\\]*)*"', 0), STYLES['string']),
+                       (QRegExp(r"'[^'\\]*(\\.[^'\\]*)*'", 0), STYLES['string']),
+                       (QRegExp(r'//[^\n]*', 0), STYLES['comment']),
+                       (QRegExp(r'\b[+-]?[0-9]+[lL]?\b', 0), STYLES['numbers']),
+                       (QRegExp(r'\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\b', 0), STYLES['numbers']),
+                       (QRegExp(r'\b[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\b', 0), STYLES['numbers'])]
         # Multi-Line to repair don't set color
         self.commentStartExpression = QRegExp("/*\\")
         self.commentEndExpression = QRegExp("\\*/")
@@ -75,7 +76,7 @@ class Highlighter(QSyntaxHighlighter):
         while startindex >= 0:
             endIndex = self.commentEndExpression.indexIn(text, startindex)
 
-            if  endIndex == -1:
+            if endIndex == -1:
                 self.setCurrentBlockState(1)
                 commentlenght = len(text) - startindex
             else:
