@@ -1,201 +1,91 @@
-# -*- coding: utf-8 -*-
+import sys
 
-# Form implementation generated from reading ui file 'DEdit.ui'
-#
-# Created by: PyQt5 UI code generator 5.11.2
-#
-# WARNING! All changes made in this file will be lost!
+from PyQt5.QtCore import QSize, Qt
 
-from os import path
-
-from PyQt5.QtCore import QSize, Qt, QMetaObject
-
-from PyQt5.QtGui import QIcon, QPixmap
-
-from PyQt5.QtWidgets import QFrame, QWidget, QGridLayout, QTextEdit, QHBoxLayout, QProgressBar\
-                            , QLabel, QLayout, QSizePolicy, QSpacerItem, QPushButton, QTabWidget\
-                            , QFormLayout, QMainWindow, QApplication, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QTextEdit, QToolBar, QTabWidget, QMainWindow,\
+    QApplication, QFileDialog, QMessageBox
+import qdarkstyle
 import api
 import syntax
 
-class Ui_MainWindow(QMainWindow):
-    def setupUi(self, MainWindow):
 
-        self.basepath = path.dirname(__file__)
-        self.filepath = path.abspath(path.join(self.basepath, "Images"))
+class Editer(QMainWindow, QTextEdit):
+    def __init__(self, parent=None):
+        myclass = Editer
+        super(myclass, self).__init__(parent)
+        # Created all Tables
+        self.all_buttons = []
+        self.fullname = ["Start"]
+        self.pointforobject = ["Start"]
 
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(988, 873)
-        self.centralwidget = QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.gridLayout = QGridLayout(self.centralwidget)
-        self.gridLayout.setObjectName("gridLayout")
-        self.frame_3 = QFrame(self.centralwidget)
-        self.frame_3.setMaximumSize(QSize(1012, 47))
-        self.frame_3.setFrameShape(QFrame.Box)
-        self.frame_3.setFrameShadow(QFrame.Raised)
-        self.frame_3.setLineWidth(2)
-        self.frame_3.setObjectName("frame_3")
-        self.horizontalLayout_2 = QHBoxLayout(self.frame_3)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.progressBar = QProgressBar(self.frame_3)
-        self.progressBar.setProperty("value", 0)
-        self.progressBar.setObjectName("progressBar")
-        self.horizontalLayout_2.addWidget(self.progressBar)
-        #Credits
-        self.label = QLabel(self.frame_3)
-        self.label.setStyleSheet("font: 12pt \"Rockwell\";")
-        self.label.setFrameShape(QFrame.NoFrame)
-        self.label.setFrameShadow(QFrame.Sunken)
-        self.label.setScaledContents(False)
-        self.label.setAlignment(Qt.AlignCenter)
-        self.label.setOpenExternalLinks(False)
-        self.label.setObjectName("label")
-        self.label.setText("Created By Piotr\"Verus\"Jasiński")
-        self.horizontalLayout_2.addWidget(self.label)
+        # All Class Definitions
+        self.tabWidget = QTabWidget(self)
+        self.toolbar = QToolBar()
 
-        self.gridLayout.addWidget(self.frame_3, 3, 1, 1, 1)
-        self.frame = QFrame(self.centralwidget)
-        self.frame.setEnabled(True)
-        self.frame.setMinimumSize(QSize(60, 80))
-        self.frame.setFrameShape(QFrame.Box)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.frame.setLineWidth(2)
-        self.frame.setMidLineWidth(0)
-        self.frame.setObjectName("frame")
-        self.horizontalLayout = QHBoxLayout(self.frame)
-        self.horizontalLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.horizontalLayout.setContentsMargins(191, -1, 200, 9)
-        self.horizontalLayout.setSpacing(0)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QSpacerItem(40, 20, QSizePolicy.Maximum, QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem)
+        self.main_look()
 
-        # Button New
-        self.btn_new = QPushButton(self.frame)
-        self.btn_new.setMaximumSize(QSize(80, 50))
-        self.btn_new.setText("")
-        self.btn_new.setObjectName("btn_new")
-        self.btn_new.setIcon(self.return_image("New.png", 40))
-        self.btn_new.clicked.connect(self.new_file)
-        self.horizontalLayout.addWidget(self.btn_new)
-        spacerItem1 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem1)
+    def main_look(self):
 
-        # Button Open
-        self.btn_open = QPushButton(self.frame)
-        self.btn_open.setMaximumSize(QSize(80, 50))
-        self.btn_open.setText("")
-        self.btn_open.setObjectName("btn_open")
-        self.btn_open.setIcon(self.return_image("open-file.png", 40))
-        self.btn_open.clicked.connect(self.load_file)
-        self.horizontalLayout.addWidget(self.btn_open)
-        spacerItem2 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem2)
-
-        # Button Save
-        self.btn_save = QPushButton(self.frame)
-        self.btn_save.setMaximumSize(QSize(80, 50))
-        self.btn_save.setText("")
-        self.btn_save.setObjectName("btn_save")
-        self.btn_save.setIcon(self.return_image("save.png", 40))
-        self.btn_save.clicked.connect(self.file_save)
-        self.horizontalLayout.addWidget(self.btn_save)
-        spacerItem3 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem3)
-
-        # Button On/Off Highlihte
-        self.btn_light = QPushButton(self.frame)
-        self.btn_light.setMaximumSize(QSize(80, 50))
-        self.btn_light.setText("")
-        self.btn_light.setObjectName("btn_light")
-        self.btn_light.setIcon(self.return_image("light.png", 40))
-        self.horizontalLayout.addWidget(self.btn_light)
-        spacerItem4 = QSpacerItem(10, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem4)
-
-        # Button Change Leangue
-        self.btn_lang = QPushButton(self.frame)
-        self.btn_lang.setMaximumSize(QSize(80, 50))
-        self.btn_lang.setText("")
-        self.btn_lang.setObjectName("btn_lang")
-        self.btn_lang.setIcon(self.return_image("translate.png", 40))
-        self.horizontalLayout.addWidget(self.btn_lang)
-
-        spacerItem5 = QSpacerItem(40, 20, QSizePolicy.Maximum, QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem5)
-        self.gridLayout.addWidget(self.frame, 1, 1, 1, 1, Qt.AlignTop)
-        self.frame_2 = QFrame(self.centralwidget)
-        self.frame_2.setFrameShape(QFrame.Box)
-        self.frame_2.setFrameShadow(QFrame.Raised)
-        self.frame_2.setLineWidth(2)
-        self.frame_2.setObjectName("frame_2")
-        self.formLayout = QFormLayout(self.frame_2)
-        self.formLayout.setSizeConstraint(QLayout.SetMaximumSize)
-        self.formLayout.setFieldGrowthPolicy(QFormLayout.FieldsStayAtSizeHint)
-        self.formLayout.setRowWrapPolicy(QFormLayout.WrapAllRows)
-        self.formLayout.setLabelAlignment(Qt.AlignCenter)
-        self.formLayout.setFormAlignment(Qt.AlignCenter)
-        self.formLayout.setObjectName("formLayout")
-        self.tabWidget = QTabWidget(self.frame_2)
-        sizePolicy = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
-        self.tabWidget.setSizePolicy(sizePolicy)
-        self.tabWidget.setMinimumSize(QSize(900, 600))
-        self.tabWidget.setMaximumSize(QSize(0, 0))
-        self.tabWidget.setBaseSize(QSize(0, 0))
-        self.tabWidget.setContextMenuPolicy(Qt.DefaultContextMenu)
-        self.tabWidget.setLayoutDirection(Qt.LeftToRight)
-        self.tabWidget.setAutoFillBackground(True)
+        self.all_buttons += [api.create_button(self, self.create_tab,
+                                               80,
+                                               icon="New.png",
+                                               shortcut="Ctrl + N")]
+        self.all_buttons += [api.create_button(self, self.load_file,
+                                               80,
+                                               icon="open-file.png",
+                                               shortcut="Ctrl + O")]
+        self.all_buttons += [api.create_button(self, self.file_save,
+                                               80,
+                                               icon="save.png",
+                                               shortcut="Ctrl + S")]
+        # TabWidget Settings
         self.tabWidget.setObjectName("tabWidget")
-        self.tab = QTextEdit()
-        self.tab.setObjectName("New 1")
-        self.tabWidget.addTab(self.tab, "New 1")
-        self.highlight = syntax.Highlighter(self.tab.document())
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.tabWidget)
-        self.gridLayout.addWidget(self.frame_2, 2, 1, 1, 1)
-        spacerItem6 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem6, 4, 1, 1, 1)
-        spacerItem7 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem7, 2, 0, 1, 1)
-        spacerItem8 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem8, 2, 2, 1, 1)
-        spacerItem9 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem9, 0, 1, 1, 1)
-        MainWindow.setCentralWidget(self.centralwidget)
+        self.create_tab("Welcome in My Editor to Write Daedalus Scripts \n"
+                        "Created by Verus", filename="StartSite")
 
-        self.tabWidget.setCurrentIndex(1)
-        QMetaObject.connectSlotsByName(MainWindow)
+        # Tollbar Action added
+        self.toolbar.addAction(self.all_buttons[0])
+        self.toolbar.insertSeparator(self.all_buttons[1])
+        self.toolbar.addAction(self.all_buttons[1])
+        self.toolbar.insertSeparator(self.all_buttons[2])
+        self.toolbar.addAction(self.all_buttons[2])
+        self.toolbar.setAllowedAreas(Qt.RightToolBarArea |
+                                     Qt.RightToolBarArea)
+        self.toolbar.setMovable(False)
+        self.toolbar.setIconSize(QSize(42, 42))
+        self.addToolBar(self.toolbar)
 
-        # Create Arrays
-        self.fullname = ["New 1"]
-        self.pointforobject = ["New 1"]
+        # MainWindow Look and size
+        self.resize(800, 600)
+        self.setCentralWidget(self.tabWidget)
+        self.setWindowIcon(api.return_image("Daedalus_Logo_128x128.png"))
+        self.setWindowTitle("DEdit")
+        self.show()
 
-    def new_file(self):
-        tab = QTextEdit()
-        tab.toPlainText().encode("utf-8").decode("ansi")
-        filename = str(len(self.fullname) + 1)
-        self.tabWidget.addTab(tab, "New " + filename)
-        self.fullname.append(filename)
-        self.pointforobject.append(str(tab))
-        self.tabWidget.setCurrentWidget(tab)
-        self.highlight = syntax.Highlighter(tab.document())
+    def create_tab(self, content="", filename="New"):
+        result = api.check_exist_filename(self, filename)
+        if result is True:
+            self.create_msg("Exist", "You have open this file on tab ")
+        elif result is False:
+            # Add Tab
+            tab = QTextEdit()
+            self.tabWidget.addTab(tab, filename)
+            tab.setStyleSheet("color: rgb(255,255,255);"
+                              "background-color: rgb(50,65,74);"
+                              "font-size: 18px;"
+                              "font-family: Courier;")
+            try:
+                tab.setText(content)
+            except TypeError:
+                pass
+            self.highlight = syntax.Highlighter(tab.document())
+            self.fullname.append(filename)
+            self.pointforobject.append(str(tab))
+            self.tabWidget.setCurrentWidget(tab)
 
-    def file_save(self):
-        try:
-            type_to_save = "Daedalus (*.d) ;; ModelScript (*.mds);; Source Scripts(*src)"
-            name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', type_to_save)
-            file = open(name, "w")
-            tab = api.get_tab_object(self.tabWidget)
-            text = tab.toPlainText()
-            file.write(text)
-            file.close()
-        except FileNotFoundError:
-            pass
-        except PermissionError:
-            pass
+    def create_msg(self, title, text):
+        msg = QMessageBox
+        msg.information(self, title, text, msg.Yes)
 
     def load_file(self):
         try:
@@ -212,30 +102,19 @@ class Ui_MainWindow(QMainWindow):
         except TypeError:
             pass
 
-    def create_tab(self, content="", filename="New"):
-        result = api.check_exist_filename(self, filename)
-        if result is True:
-            self.create_msg("Exist", "You have open this file on tab ")
-        elif result is False:
-            # Add Tab
-            tab = QTextEdit()
-            self.tabWidget.addTab(tab, filename)
-            tab.setText(content)
-            self.highlight = syntax.Highlighter(tab.document())
-            self.fullname.append(filename)
-            self.pointforobject.append(str(tab))
-            self.tabWidget.setCurrentWidget(tab)
-        return
-
-    def create_msg(self, title, text):
-        msg = QMessageBox
-        msg.information(self, title, text, msg.Yes)
-
-    def return_image(self, name, size):
-        icon = QIcon()
-        icon.addPixmap(QPixmap(self.filepath + "\\" + name), QIcon.Normal, QIcon.Off)
-        icon.pixmap(QSize(size, size))
-        return icon
+    def file_save(self):
+        try:
+            type_to_save = "Daedalus (*.d) ;; ModelScript (*.mds);; Source Scripts(*src)"
+            name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', type_to_save)
+            file = open(name, "w")
+            tab = api.get_tab_object(self.tabWidget)
+            text = tab.toPlainText()
+            file.write(text)
+            file.close()
+        except FileNotFoundError:
+            pass
+        except PermissionError:
+            pass
 
     def closeEvent(self, event):
         event.ignore()
@@ -250,12 +129,10 @@ class Ui_MainWindow(QMainWindow):
             pass
 
 
-if __name__ == "__main__":
-    import sys
-    app = QApplication(sys.argv)
-    MainWindow = QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+if __name__ == '__main__':
 
+    app = QApplication(sys.argv)
+    app.setStyle("fusion")
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+    myclass = Editer()
+    sys.exit(app.exec_())
