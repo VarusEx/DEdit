@@ -27,14 +27,17 @@ class Editer(QMainWindow, QTextEdit):
     def main_look(self):
 
         self.all_buttons += [api.create_button(self, self.create_tab,
+                                               "Create New File",
                                                80,
                                                icon="New.png",
                                                shortcut="Ctrl + N")]
         self.all_buttons += [api.create_button(self, self.load_file,
+                                               "Load File",
                                                80,
                                                icon="open-file.png",
                                                shortcut="Ctrl + O")]
         self.all_buttons += [api.create_button(self, self.file_save,
+                                               "Save File",
                                                80,
                                                icon="save.png",
                                                shortcut="Ctrl + S")]
@@ -42,6 +45,7 @@ class Editer(QMainWindow, QTextEdit):
         self.tabWidget.setObjectName("tabWidget")
         self.create_tab("Welcome in My Editor to Write Daedalus Scripts \n"
                         "Created by Verus", filename="StartSite")
+        self.tabWidget.tabCloseRequested.connect(self.remove_tab)
 
         # Tollbar Action added
         self.toolbar.addAction(self.all_buttons[0])
@@ -58,14 +62,17 @@ class Editer(QMainWindow, QTextEdit):
         # MainWindow Look and size
         self.resize(800, 600)
         self.setCentralWidget(self.tabWidget)
-        self.setWindowIcon(api.return_image("Daedalus_Logo_128x128.png"))
+        self.setWindowIcon(api.get_image("Daedalus_Logo_128x128.png"))
         self.setWindowTitle("DEdit")
         self.show()
 
     def create_tab(self, content="", filename="New"):
         result = api.check_exist_filename(self, filename)
         if result is True:
-            self.create_msg("Exist", "You have open this file on tab ")
+            if filename is "New":
+                self.create_tab(content="", filename="New " + str(len(self.fullname) - 1))
+            else:
+                self.create_msg("Exist", "You have open this file on tab ")
         elif result is False:
             # Add Tab
             tab = QTextEdit()
@@ -80,8 +87,11 @@ class Editer(QMainWindow, QTextEdit):
                 pass
             self.highlight = syntax.Highlighter(tab.document())
             self.fullname.append(filename)
-            self.pointforobject.append(str(tab))
+            self.pointforobject.append(tab)
             self.tabWidget.setCurrentWidget(tab)
+            self.tabWidget.setTabIcon(api.get_tab_index(self.tabWidget), api.get_image('file.png'))
+            self.tabWidget.setTabsClosable(True)
+
 
     def create_msg(self, title, text):
         msg = QMessageBox
@@ -127,6 +137,9 @@ class Editer(QMainWindow, QTextEdit):
             sys.exit()
         else:
             pass
+
+    def remove_tab(self, index):
+        self.tabWidget.removeTab(index)
 
 
 if __name__ == '__main__':

@@ -5,19 +5,16 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QAction
 
 
-def get_tab_object( tab):
-    current = tab.currentWidget()
-    return current
+def get_tab_object(tab):
+    return tab.currentWidget()
 
 
-def get_tab_index(self, tab):
-    index = tab.indexOf(self.get_tab_object())
-    return index
+def get_tab_index(tab):
+    return tab.indexOf(get_tab_object(tab))
 
 
-def get_tab_name(self, tab):
-    name = tab.tabText(self.get_tab_index())
-    return name
+def get_tab_name(tab):
+    return tab.tabText(get_tab_index())
 
 
 def check_exist_filename(self, name):
@@ -28,11 +25,10 @@ def check_exist_filename(self, name):
 
 
 def find_way_to_file(file):
-    base = path.abspath(path.join(path.dirname(__file__), file))
-    return base
+    return path.abspath(path.join(path.dirname(__file__), file))
 
 
-def return_image(name, size=None):
+def get_image(name, size=None):
     icon = QIcon()
     icon.addPixmap(QPixmap(find_way_to_file("Images") + "\\" + name), QIcon.Normal, QIcon.Off)
     if size is not None:
@@ -40,10 +36,10 @@ def return_image(name, size=None):
     return icon
 
 
-def create_button(self, func_name, icon_size, icon="", shortcut=""):
-    icon_btn = return_image(icon, icon_size)
+def create_button(self, func_name, name_button, icon_size, icon="", shortcut=""):
+    icon_btn = get_image(icon, icon_size)
 
-    button = QAction(icon_btn, 'Exit', self)
+    button = QAction(icon_btn, name_button, self)
     button.setIcon(icon_btn)
     button.setShortcut(shortcut)
     button.triggered.connect(func_name)

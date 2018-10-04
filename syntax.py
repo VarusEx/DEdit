@@ -38,7 +38,7 @@ class Highlighter(QSyntaxHighlighter):
 
         xml_read.read_keywords_from_xml(self)
 
-        array_from_xml = xml_read.xmldata
+        array_from_xml = xml_read.xml_data
 
         self.rules = []
 
