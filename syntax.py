@@ -21,14 +21,18 @@ def format(color, style=''):
         _format.setFontItalic(True)
     return _format
 
+xml_read.read_style_from_xml()
+
+array_color = []
+array_color.extend(xml_read.xml_color[0])
 
 STYLES = {
-    'keyword': format('blue'),
-    'operator': format('red'),
-    'comment': format('darkGreen'),
-    'function': format('darkBlue'),
-    'string': format('green'),
-    'numbers': format('blue')
+    'keyword': format(array_color[0]),
+    'operator': format(array_color[1]),
+    'comment': format(array_color[2]),
+    'function': format(array_color[3]),
+    'string': format(array_color[4]),
+    'numbers': format(array_color[5])
 }
 
 

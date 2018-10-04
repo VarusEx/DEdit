@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<style>
+    <highlight>
+        <item color="blue" /> <!-- keyword -->
+        <item color="red" /> <!-- operator -->
+        <item color="darkGreen" /> <!-- comment -->
+        <item color="darkBlue" /> <!-- function -->
+        <item color="green" /> <!-- string -->
+        <item color="yellow" /> <!-- numbers -->
+    </highlight>
+</style>

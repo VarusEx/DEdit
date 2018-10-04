@@ -3,6 +3,7 @@ import api
 
 
 xml_data = []
+xml_color = []
 
 
 def read_keywords_from_xml(self):
@@ -21,5 +22,9 @@ def read_keywords_from_xml(self):
     xml_data.append([])
 
 
-def read_config_from_xml():
-    pass
+def read_style_from_xml():
+    xml_doc = minidom.parse(api.find_way_to_file("style.xml"))
+
+    xml_color.append([])
+    for item in xml_doc.getElementsByTagName('highlight')[0].getElementsByTagName("item"):
+        xml_color[0].append(item.attributes["color"].value)
