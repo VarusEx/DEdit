@@ -1,4 +1,5 @@
 import sys
+import os
 
 from PyQt5.QtCore import QSize, Qt
 
@@ -15,8 +16,7 @@ class Editer(QMainWindow, QTextEdit):
         super(myclass, self).__init__(parent)
         # Created all Tables
         self.all_buttons = []
-        self.fullname = ["Start"]
-        self.pointforobject = ["Start"]
+        self.fullname = ["StartSite"]
 
         # All Class Definitions
         self.tabWidget = QTabWidget(self)
@@ -87,7 +87,7 @@ class Editer(QMainWindow, QTextEdit):
                 pass
             self.highlight = syntax.Highlighter(tab.document())
             self.fullname.append(filename)
-            self.pointforobject.append(tab)
+            print(filename)
             self.tabWidget.setCurrentWidget(tab)
             self.tabWidget.setTabIcon(api.get_tab_index(self.tabWidget), api.get_image('file.png'))
             self.tabWidget.setTabsClosable(True)
@@ -102,10 +102,11 @@ class Editer(QMainWindow, QTextEdit):
             type_to_load = "Daedalus (*.d) ;; ModelScript (*.mds);; Source Scripts(*src)"
             name, _ = QFileDialog.getOpenFileName(self, 'Open File', '\\*.d', type_to_load)
             file = open(name, 'r')
+            temp = os.path.splitext(name)[0]
 
             with file:
                 text = file.read()
-                self.create_tab(text, name)
+                self.create_tab(text, os.path.basename(temp))
 
         except FileNotFoundError:
             pass
@@ -139,7 +140,11 @@ class Editer(QMainWindow, QTextEdit):
             pass
 
     def remove_tab(self, index):
-        self.tabWidget.removeTab(index)
+        try:
+            self.fullname.remove(self.tabWidget.tabText(index))
+            self.tabWidget.removeTab(index)
+        except ValueError:
+            pass
 
 
 if __name__ == '__main__':

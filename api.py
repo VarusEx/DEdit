@@ -14,7 +14,7 @@ def get_tab_index(tab):
 
 
 def get_tab_name(tab):
-    return tab.tabText(get_tab_index())
+    return tab.tabText(get_tab_index(tab))
 
 
 def check_exist_filename(self, name):
