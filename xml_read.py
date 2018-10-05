@@ -1,5 +1,5 @@
 from xml.dom import minidom
-import api
+import FileHelper
 
 
 xml_data = []
@@ -7,7 +7,7 @@ xml_color = []
 
 
 def read_keywords_from_xml(self):
-    xml_doc = minidom.parse(api.find_way_to_file("keywords.xml"))
+    xml_doc = minidom.parse(FileHelper.find_way_to_file("keywords.xml"))
 
     xml_data.append([])
     # While to takes elements from xml file
@@ -23,7 +23,7 @@ def read_keywords_from_xml(self):
 
 
 def read_style_from_xml():
-    xml_doc = minidom.parse(api.find_way_to_file("style.xml"))
+    xml_doc = minidom.parse(FileHelper.find_way_to_file("style.xml"))
 
     xml_color.append([])
     for item in xml_doc.getElementsByTagName('highlight')[0].getElementsByTagName("item"):

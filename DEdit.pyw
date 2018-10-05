@@ -1,13 +1,14 @@
 import sys
 import os
 
-from PyQt5.QtCore import QSize, Qt
-
 from PyQt5.QtWidgets import QTextEdit, QToolBar, QTabWidget, QMainWindow,\
     QApplication, QFileDialog, QMessageBox
 import qdarkstyle
-import api
+
 import syntax
+import UI
+import Helpers
+import FileHelper
 
 
 class Editer(QMainWindow, QTextEdit):
@@ -16,58 +17,17 @@ class Editer(QMainWindow, QTextEdit):
         super(myclass, self).__init__(parent)
         # Created all Tables
         self.all_buttons = []
-        self.fullname = ["StartSite"]
+        self.fullname = []
 
         # All Class Definitions
         self.tabWidget = QTabWidget(self)
         self.toolbar = QToolBar()
 
-        self.main_look()
-
-    def main_look(self):
-
-        self.all_buttons += [api.create_button(self, self.create_tab,
-                                               "Create New File",
-                                               80,
-                                               icon="New.png",
-                                               shortcut="Ctrl + N")]
-        self.all_buttons += [api.create_button(self, self.load_file,
-                                               "Load File",
-                                               80,
-                                               icon="open-file.png",
-                                               shortcut="Ctrl + O")]
-        self.all_buttons += [api.create_button(self, self.file_save,
-                                               "Save File",
-                                               80,
-                                               icon="save.png",
-                                               shortcut="Ctrl + S")]
-        # TabWidget Settings
-        self.tabWidget.setObjectName("tabWidget")
-        self.create_tab("Welcome in My Editor to Write Daedalus Scripts \n"
-                        "Created by Verus", filename="StartSite")
-        self.tabWidget.tabCloseRequested.connect(self.remove_tab)
-
-        # Tollbar Action added
-        self.toolbar.addAction(self.all_buttons[0])
-        self.toolbar.insertSeparator(self.all_buttons[1])
-        self.toolbar.addAction(self.all_buttons[1])
-        self.toolbar.insertSeparator(self.all_buttons[2])
-        self.toolbar.addAction(self.all_buttons[2])
-        self.toolbar.setAllowedAreas(Qt.RightToolBarArea |
-                                     Qt.RightToolBarArea)
-        self.toolbar.setMovable(False)
-        self.toolbar.setIconSize(QSize(42, 42))
-        self.addToolBar(self.toolbar)
-
-        # MainWindow Look and size
-        self.resize(800, 600)
-        self.setCentralWidget(self.tabWidget)
-        self.setWindowIcon(api.get_image("Daedalus_Logo_128x128.png"))
-        self.setWindowTitle("DEdit")
-        self.show()
+        # Call my UI
+        UI.ui_look(self)
 
     def create_tab(self, content="", filename="New"):
-        result = api.check_exist_filename(self, filename)
+        result = Helpers.check_exist_filename(self, filename)
         if result is True:
             if filename is "New":
                 self.create_tab(content="", filename="New " + str(len(self.fullname) - 1))
@@ -89,9 +49,8 @@ class Editer(QMainWindow, QTextEdit):
             self.fullname.append(filename)
             print(filename)
             self.tabWidget.setCurrentWidget(tab)
-            self.tabWidget.setTabIcon(api.get_tab_index(self.tabWidget), api.get_image('file.png'))
+            self.tabWidget.setTabIcon(Helpers.get_tab_index(self.tabWidget), FileHelper.get_image('file.png'))
             self.tabWidget.setTabsClosable(True)
-
 
     def create_msg(self, title, text):
         msg = QMessageBox
@@ -118,7 +77,7 @@ class Editer(QMainWindow, QTextEdit):
             type_to_save = "Daedalus (*.d) ;; ModelScript (*.mds);; Source Scripts(*src)"
             name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', type_to_save)
             file = open(name, "w")
-            tab = api.get_tab_object(self.tabWidget)
+            tab = Helpers.get_tab_object(self.tabWidget)
             text = tab.toPlainText()
             file.write(text)
             file.close()
