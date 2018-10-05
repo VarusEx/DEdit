@@ -38,4 +38,6 @@ def ui_look(self):
     self.setCentralWidget(self.tabWidget)
     self.setWindowIcon(FileHelper.get_image("Daedalus_Logo_128x128.png"))
     self.setWindowTitle("DEdit")
+    self.setAcceptDrops(True)
+    self.setMinimumSize(800, 600)
     self.show()

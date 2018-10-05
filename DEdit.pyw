@@ -1,10 +1,13 @@
+# Main Python Modules
 import sys
 import os
 
+# PyQT5 and others Outside Modules
 from PyQt5.QtWidgets import QTextEdit, QToolBar, QTabWidget, QMainWindow,\
     QApplication, QFileDialog, QMessageBox
 import qdarkstyle
 
+# My Private Modules
 import syntax
 import UI
 import Helpers
@@ -47,7 +50,6 @@ class Editer(QMainWindow, QTextEdit):
                 pass
             self.highlight = syntax.Highlighter(tab.document())
             self.fullname.append(filename)
-            print(filename)
             self.tabWidget.setCurrentWidget(tab)
             self.tabWidget.setTabIcon(Helpers.get_tab_index(self.tabWidget), FileHelper.get_image('file.png'))
             self.tabWidget.setTabsClosable(True)
@@ -104,6 +106,20 @@ class Editer(QMainWindow, QTextEdit):
             self.tabWidget.removeTab(index)
         except ValueError:
             pass
+
+    def dragEnterEvent(self, event):
+
+        if event.mimeData().hasText():
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        for url in event.mimeData().urls():
+            path_to_file = url.toLocalFile()
+            if os.path.isfile(path_to_file):
+                FileHelper.load_text_from_file(self, path_to_file)
+
 
 
 if __name__ == '__main__':
