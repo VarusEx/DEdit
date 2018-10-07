@@ -41,9 +41,9 @@ class Editer(QMainWindow, QTextEdit):
             tab = QTextEdit()
             self.tabWidget.addTab(tab, filename)
             tab.setStyleSheet("color: rgb(255,255,255);"
-                              "background-color: rgb(50,65,74);"
                               "font-size: 18px;"
                               "font-family: Courier;")
+            tab.setAcceptDrops(False)
             try:
                 tab.setText(content)
             except TypeError:
@@ -53,6 +53,7 @@ class Editer(QMainWindow, QTextEdit):
             self.tabWidget.setCurrentWidget(tab)
             self.tabWidget.setTabIcon(Helpers.get_tab_index(self.tabWidget), FileHelper.get_image('file.png'))
             self.tabWidget.setTabsClosable(True)
+
 
     def create_msg(self, title, text):
         msg = QMessageBox
