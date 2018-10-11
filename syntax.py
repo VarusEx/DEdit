@@ -47,11 +47,11 @@ class Highlighter(QSyntaxHighlighter):
         self.rules = []
 
         self.rules += [(QRegExp(r'\b%s\b' % keyword, 0), STYLES['keyword'])for keyword in
-                        array_from_xml[0]]
+                       array_from_xml[0]]
         self.rules += [(QRegExp(r'%s' % operator, 0), STYLES['operator']) for operator in
-                        array_from_xml[1]]
+                       array_from_xml[1]]
         self.rules += [(QRegExp(r'\b%s\b' % func, 0), STYLES['function'])for func in
-                        array_from_xml[2]]
+                       array_from_xml[2]]
         self.rules += [(QRegExp(r'"[^"\\]*(\\.[^"\\]*)*"', 0), STYLES['string']),
                        (QRegExp(r"'[^'\\]*(\\.[^'\\]*)*'", 0), STYLES['string']),
                        (QRegExp(r'//[^\n]*', 0), STYLES['comment']),

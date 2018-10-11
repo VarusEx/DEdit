@@ -89,10 +89,6 @@ class Editer(QMainWindow, QTextEdit):
         except PermissionError:
             pass
 
-    def closeEvent(self, event):
-        event.ignore()
-        self.close_application()
-
     def close_application(self):
         msg = QMessageBox
         choice = msg.question(self, "Close", "Really you want close?", msg.Yes | msg.No)
@@ -107,6 +103,10 @@ class Editer(QMainWindow, QTextEdit):
             self.tabWidget.removeTab(index)
         except ValueError:
             pass
+
+    def closeEvent(self, event):
+        event.ignore()
+        self.close_application()
 
     def dragEnterEvent(self, event):
 
