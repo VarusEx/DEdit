@@ -1,12 +1,11 @@
-import sys
-
 from PyQt5.QtCore import QRegExp
 
 from PyQt5.QtGui import QColor, QTextCharFormat, QFont, QSyntaxHighlighter
 
-import xml_read
+from DEdit import xml_read
 
 # Return Formated Text with attributes
+
 
 def format(color, style=''):
 
@@ -20,6 +19,7 @@ def format(color, style=''):
     if 'italic' in style:
         _format.setFontItalic(True)
     return _format
+
 
 xml_read.read_style_from_xml()
 
@@ -78,15 +78,15 @@ class Highlighter(QSyntaxHighlighter):
             startindex = self.commentStartExpression.indexIn(text)
 
         while startindex >= 0:
-            endIndex = self.commentEndExpression.indexIn(text, startindex)
+            endindex = self.commentEndExpression.indexIn(text, startindex)
 
-            if endIndex == -1:
+            if endindex == -1:
                 self.setCurrentBlockState(1)
                 commentlenght = len(text) - startindex
             else:
-                commentlenght = endIndex - startindex + self.commentEndExpression.matchedLength()
+                commentlenght = endindex - startindex + self.commentEndExpression.matchedLength()
 
                 self.setFormat(startindex, commentlenght,
-                        self.multiLineCommentFormat)
+                               self.multiLineCommentFormat)
                 startindex = self.commentStartExpression.indexIn(text,
-                           startindex + commentlenght)
+                                                                 startindex + commentlenght)

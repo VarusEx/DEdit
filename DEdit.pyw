@@ -8,10 +8,7 @@ from PyQt5.QtWidgets import QTextEdit, QToolBar, QTabWidget, QMainWindow,\
 import qdarkstyle
 
 # My Private Modules
-import syntax
-import UI
-import Helpers
-import FileHelper
+from DEdit import syntax, UI, Helpers, FileHelper
 
 
 class Editer(QMainWindow, QTextEdit):
@@ -53,7 +50,6 @@ class Editer(QMainWindow, QTextEdit):
             self.tabWidget.setCurrentWidget(tab)
             self.tabWidget.setTabIcon(Helpers.get_tab_index(self.tabWidget), FileHelper.get_image('file.png'))
             self.tabWidget.setTabsClosable(True)
-
 
     def create_msg(self, title, text):
         msg = QMessageBox
@@ -120,7 +116,6 @@ class Editer(QMainWindow, QTextEdit):
             path_to_file = url.toLocalFile()
             if os.path.isfile(path_to_file):
                 FileHelper.load_text_from_file(self, path_to_file)
-
 
 
 if __name__ == '__main__':

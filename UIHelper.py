@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon
 
-import FileHelper
+from DEdit import FileHelper
 
 
 def create_button(self, func_name, name_button, icon="", shortcut=""):

@@ -3,7 +3,7 @@ import os
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import QSize
 
-import DEdit
+from DEdit import DEdit
 
 
 def find_way_to_file(file):
