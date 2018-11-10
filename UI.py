@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, QSize
 
-from DEdit import UIHelper, FileHelper
+import UIHelper, FileHelper
 
 
 def ui_look(self):

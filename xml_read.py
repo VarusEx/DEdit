@@ -1,5 +1,5 @@
 from xml.dom import minidom
-from DEdit import FileHelper
+import FileHelper
 
 
 xml_data = []

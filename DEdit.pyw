@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QTextEdit, QToolBar, QTabWidget, QMainWindow,\
 import qdarkstyle
 
 # My Private Modules
-from DEdit import syntax, UI, Helpers, FileHelper
+import syntax, UI, Helpers, FileHelper
 
 
 class Editer(QMainWindow, QTextEdit):
