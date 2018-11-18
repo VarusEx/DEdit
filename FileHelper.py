@@ -22,4 +22,4 @@ def load_text_from_file(self, path):
     file = open(path, 'r')
     with file:
         text = file.read()
-        DEdit.Editer.create_tab(self, text, os.path.basename(path))
+        DEdit.Editer.create_tab(self, text, os.path.basename(path), mode=0)

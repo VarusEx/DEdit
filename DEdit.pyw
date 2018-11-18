@@ -4,11 +4,11 @@ import os
 
 # PyQT5 and others Outside Modules
 from PyQt5.QtWidgets import QTextEdit, QToolBar, QTabWidget, QMainWindow,\
-    QApplication, QFileDialog, QMessageBox
+    QApplication, QFileDialog, QMessageBox, QPushButton
 import qdarkstyle
 
 # My Private Modules
-import syntax, UI, Helpers, FileHelper
+import syntax, UI, Helpers, FileHelper, UIHelper
 
 
 class Editer(QMainWindow, QTextEdit):
@@ -22,15 +22,21 @@ class Editer(QMainWindow, QTextEdit):
         # All Class Definitions
         self.tabWidget = QTabWidget(self)
         self.toolbar = QToolBar()
+        self.highlight = None
 
         # Call my UI
         UI.ui_look(self)
 
-    def create_tab(self, content="", filename="New"):
+    def create_tab(self, content="", filename="New", mode=1, style=0):
         result = Helpers.check_exist_filename(self, filename)
+        if mode is 1:
+            choice = self.tab_type()
+            print(choice)
+        else:
+            choice = style
         if result is True:
             if filename is "New":
-                self.create_tab(content="", filename="New " + str(len(self.fullname) - 1))
+                self.create_tab(content="", filename="New " + str(len(self.fullname) - 1), mode=0, style=choice)
             else:
                 self.create_msg("Exist", "You have open this file on tab ")
         elif result is False:
@@ -42,7 +48,14 @@ class Editer(QMainWindow, QTextEdit):
                               "font-family: Courier;")
             tab.setAcceptDrops(False)
             try:
-                tab.setText(content)
+                if choice == 1:
+                    tab.setText(UIHelper.npc_form)
+                elif choice == 2:
+                    tab.setText(UIHelper.dialog_form)
+                elif choice == 3:
+                    tab.setText("")
+                else:
+                    tab.setText(content)
             except TypeError:
                 pass
             self.highlight = syntax.Highlighter(tab.document())
@@ -52,19 +65,20 @@ class Editer(QMainWindow, QTextEdit):
             self.tabWidget.setTabsClosable(True)
 
     def create_msg(self, title, text):
-        msg = QMessageBox
+        msg = QMessageBox()
         msg.information(self, title, text, msg.Yes)
 
     def load_file(self):
         try:
             type_to_load = "Daedalus (*.d) ;; ModelScript (*.mds);; Source Scripts(*src)"
-            name, _ = QFileDialog.getOpenFileName(self, 'Open File', '\\*.d', type_to_load)
+            qfiledialog = QFileDialog()
+            name, _ = qfiledialog.getOpenFileName(self, 'Open File', '\\*.d', type_to_load)
             file = open(name, 'r')
             temp = os.path.splitext(name)[0]
 
             with file:
                 text = file.read()
-                self.create_tab(text, os.path.basename(temp))
+                self.create_tab(text, os.path.basename(temp), mode=0)
 
         except FileNotFoundError:
             pass
@@ -74,7 +88,8 @@ class Editer(QMainWindow, QTextEdit):
     def file_save(self):
         try:
             type_to_save = "Daedalus (*.d) ;; ModelScript (*.mds);; Source Scripts(*src)"
-            name, _ = QFileDialog.getSaveFileName(self, 'Save File', '', type_to_save)
+            qfiledialog = QFileDialog()
+            name, _ = qfiledialog.getSaveFileName(self, 'Save File', '', type_to_save)
             file = open(name, "w")
             tab = Helpers.get_tab_object(self.tabWidget)
             text = tab.toPlainText()
@@ -86,7 +101,7 @@ class Editer(QMainWindow, QTextEdit):
             pass
 
     def close_application(self):
-        msg = QMessageBox
+        msg = QMessageBox()
         choice = msg.question(self, "Close", "Really you want close?", msg.Yes | msg.No)
         if choice == msg.Yes:
             sys.exit()
@@ -99,6 +114,26 @@ class Editer(QMainWindow, QTextEdit):
             self.tabWidget.removeTab(index)
         except ValueError:
             pass
+
+    def tab_type(self):
+        msg = QMessageBox()
+        msg.setWindowTitle("What type Script?")
+        msg.setWindowIcon(FileHelper.get_image("Daedalus_Logo_128x128.png"))
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No | QMessageBox.Ignore)
+        button_npc = msg.button(QMessageBox.Yes)
+        button_npc.setText("Npc")
+        button_dialog = msg.button(QMessageBox.Ignore)
+        button_dialog.setText("Dialog")
+        button_script = msg.button(QMessageBox.No)
+        button_script.setText("Custom Script")
+        msg.exec()
+        if msg.clickedButton() is button_npc:
+            return 1
+        elif msg.clickedButton() is button_dialog:
+            return 2
+        elif msg.clickedButton() is button_script:
+            return 3
+        pass
 
     def closeEvent(self, event):
         event.ignore()

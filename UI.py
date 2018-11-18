@@ -19,7 +19,7 @@ def ui_look(self):
     # TabWidget Settings
     self.tabWidget.setObjectName("tabWidget")
     self.create_tab("Welcome in My Editor to Write Daedalus Scripts \n"
-                    "Created by Verus", filename="StartSite")
+                    "Created by Verus", filename="StartSite", mode=0)
     self.tabWidget.tabCloseRequested.connect(self.remove_tab)
     # Tollbar Action added
     self.toolbar.addAction(self.all_buttons[0])
