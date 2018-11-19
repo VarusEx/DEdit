@@ -348,5 +348,11 @@
         <item func="Wld_SetTime"/>
         <item func="Wld_SpawnNpcRange"/>
         <item func="Wld_StopEffect"/>
+        <item func="B_SetNpcVisual"/>
+        <item func="B_SetFightSkills"/>
+        <item func="B_GiveNpcTalents"/>
+        <item func="B_SetAttributesToChapter"/>
+        <item func="B_CreateAmbientInv"/>
+
     </function>
 </config>

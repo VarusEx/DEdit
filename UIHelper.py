@@ -16,7 +16,7 @@ def create_button(self, func_name, name_button, icon="", shortcut=""):
 
 npc_form = "instance TestNpc (Npc_Default)<br></bt>" \
            "{<br></bt>" \
-           "    name = \"TestNpc\";<br></bt>" \
+           "name = \"TestNpc\";<br></bt>" \
            "guild = GIL_BAU; <br></bt>" \
            "id = 2137; <br></bt>" \
            "voice = 14; <br></bt>" \
@@ -47,16 +47,16 @@ npc_form = "instance TestNpc (Npc_Default)<br></bt>" \
            "<br></bt>};"
 
 
-dialog_form = "//############################################################<br></bt>" \
-              "// 			  				   EXIT <br></bt>" \
-              "//############################################################<br></bt>" \
-              "<br></bt>" \
-              "instance DIA_NPC_EXIT(C_INFO)<br></bt>" \
-              "{<br></bt>" \
-              "	npc             = NPC;<br></bt>" \
-              "	nr              = 999;<br></bt>" \
-              "	condition		= DIA_NPC_EXIT_Condition;<br></bt>" \
-              "	information		= DIA_NPC_EXIT_Info;<br></bt>" \
-              "	permanent		= true;<br></bt>" \
-              "	description     = \"Koniec\";<br></bt>" \
-              "};<br></bt>"
+dialog_form = "//############################################################\n" \
+              "// 			  			EXIT\n" \
+              "//############################################################\n" \
+              "\n" \
+              "instance DIA_NPC_EXIT(C_INFO)\n" \
+              "{\n" \
+              "npc            = NPC;\n" \
+              "nr             = 999;\n" \
+              "condition	  = DIA_NPC_EXIT_Condition;\n" \
+              "information	  = DIA_NPC_EXIT_Info;\n" \
+              "permanent	  = true;\n" \
+              "description    = \"Koniec\";\n" \
+              "};\n"

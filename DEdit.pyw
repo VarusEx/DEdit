@@ -22,6 +22,8 @@ class Editer(QMainWindow, QTextEdit):
         # All Class Definitions
         self.tabWidget = QTabWidget(self)
         self.toolbar = QToolBar()
+
+        # Attributes
         self.highlight = None
 
         # Call my UI
@@ -31,7 +33,6 @@ class Editer(QMainWindow, QTextEdit):
         result = Helpers.check_exist_filename(self, filename)
         if mode is 1:
             choice = self.tab_type()
-            print(choice)
         else:
             choice = style
         if result is True:
@@ -115,7 +116,8 @@ class Editer(QMainWindow, QTextEdit):
         except ValueError:
             pass
 
-    def tab_type(self):
+    @staticmethod
+    def tab_type():
         msg = QMessageBox()
         msg.setWindowTitle("What type Script?")
         msg.setWindowIcon(FileHelper.get_image("Daedalus_Logo_128x128.png"))

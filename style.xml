@@ -2,11 +2,11 @@
 
 <style>
     <highlight>
-        <item color="blue" /> <!-- keyword -->
-        <item color="red" /> <!-- operator -->
-        <item color="darkGreen" /> <!-- comment -->
-        <item color="blue" /> <!-- function -->
-        <item color="green" /> <!-- string -->
-        <item color="lightblue" /> <!-- numbers -->
+        <item color="#3af100" /> <!-- keyword -->
+        <item color="#f70100" /> <!-- operator -->
+        <item color="#014301" /> <!-- comment -->
+        <item color="#0453b7" /> <!-- function -->
+        <item color="#016402" /> <!-- string -->
+        <item color="#0164ee" /> <!-- numbers -->
     </highlight>
 </style>
