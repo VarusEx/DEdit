@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<style>
+<options>
+    <basic>
+        <gothic_src root="C:\\Dzieje Khorinis"/>
+    </basic>
     <highlight>
         <item color="#3af100" /> <!-- keyword -->
         <item color="#f70100" /> <!-- operator -->
@@ -9,4 +12,4 @@
         <item color="#016402" /> <!-- string -->
         <item color="#0164ee" /> <!-- numbers -->
     </highlight>
-</style>
+</options>

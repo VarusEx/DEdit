@@ -35,6 +35,8 @@ def ui_look(self):
     # MainWindow Look and size
     self.resize(800, 600)
     self.setCentralWidget(self.tabWidget)
+    self.addDockWidget(Qt.RightDockWidgetArea, self.struc)
+    self.addDockWidget(Qt.RightDockWidgetArea, self.instance)
     self.setWindowIcon(FileHelper.get_image("Daedalus_Logo_128x128.png"))
     self.setWindowTitle("DEdit")
     self.setAcceptDrops(True)

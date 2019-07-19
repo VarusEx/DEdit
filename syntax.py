@@ -21,7 +21,7 @@ def format(color, style=''):
     return _format
 
 
-xml_read.read_style_from_xml()
+xml_read.read_options_from_xml()
 
 array_color = []
 array_color.extend(xml_read.xml_color[0])
@@ -40,7 +40,7 @@ class Highlighter(QSyntaxHighlighter):
     def __init__(self, parent=None):
         super(Highlighter, self).__init__(parent)
 
-        xml_read.read_keywords_from_xml(self)
+        xml_read.read_keywords_from_xml()
 
         array_from_xml = xml_read.xml_data
 

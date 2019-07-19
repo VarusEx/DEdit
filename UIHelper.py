@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QAction, QMessageBox
+from PyQt5.QtWidgets import QAction, QMessageBox, QTreeWidgetItem
 from PyQt5.QtGui import QIcon
 
 import FileHelper
@@ -12,6 +12,15 @@ def create_button(self, func_name, name_button, icon="", shortcut=""):
     button.setShortcut(shortcut)
     button.triggered.connect(func_name)
     return button
+
+
+def create_items(self, image, parent, strings):
+    for d in strings:
+        item = QTreeWidgetItem(parent)
+        item.setText(0, d)
+        item.setIcon(0, FileHelper.get_image(image))
+        parent.addChild(item)
+        self.all_tree_items.append(item)
 
 
 npc_form = "instance TestNpc (Npc_Default)<br></bt>" \
